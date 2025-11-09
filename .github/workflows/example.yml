@@ -2,7 +2,7 @@ name: Deploy PR Preview
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
 permissions:
   contents: read
@@ -17,15 +17,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy to Cloudflare Workers
-        uses: mertselimb/cloudflare-workers-pr-preview@v1.0.0
+      - name: Deploy Preview
+        if: github.event.action != 'closed'
+        uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
         with:
           cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
-          # Customize these as needed:
-          # build-command: npm run build
-          # install-command: npm ci
-          # package-manager: npm
-          # node-version: 18
-          # working-directory: .
-          # subdomain: my-custom-name
+
+      - name: Cleanup Preview
+        if: github.event.action == 'closed'
+        uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
+        with:
+          cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
+          mode: cleanup
