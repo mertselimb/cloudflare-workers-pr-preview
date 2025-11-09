@@ -11,6 +11,7 @@ Cloudflare Pages automatically creates preview deployments for every pull reques
 ## Features
 
 - ✨ Automatic PR preview deployments
+- 🧹 Automatic cleanup when PR is closed or merged
 - 💬 Comments preview URL directly on your PR
 - 🎨 Fully customizable build process
 - 📦 Supports npm, pnpm, and yarn
@@ -55,7 +56,7 @@ name: Deploy PR Preview
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
 permissions:
   contents: read
@@ -68,13 +69,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: mertselimb/cloudflare-workers-pr-preview@v1
+      # Deploy preview on PR open/update
+      - name: Deploy Preview
+        if: github.event.action != 'closed'
+        uses: mertselimb/cloudflare-workers-pr-preview@v1
         with:
           cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
+
+      # Cleanup preview on PR close/merge
+      - name: Cleanup Preview
+        if: github.event.action == 'closed'
+        uses: mertselimb/cloudflare-workers-pr-preview@v1
+        with:
+          cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
+          mode: cleanup
 ```
 
 That's it! 🎉
+
+**What happens:**
+- When a PR is opened or updated → Deploys preview to Cloudflare Workers
+- When a PR is closed or merged → Automatically deletes the worker deployment
 
 ## Usage
 
@@ -147,6 +164,7 @@ That's it! 🎉
 |-------|-------------|----------|---------|
 | `cloudflare-api-token` | Cloudflare API Token with Workers permissions | ✅ Yes | - |
 | `cloudflare-account-id` | Cloudflare Account ID | ✅ Yes | - |
+| `mode` | Action mode: `deploy` or `cleanup` | No | `deploy` |
 | `build-command` | Command to build your project | No | `npm run build` |
 | `install-command` | Command to install dependencies | No | `npm install` |
 | `node-version` | Node.js version to use | No | `18` |
@@ -180,14 +198,14 @@ That's it! 🎉
 
 ## Complete Example
 
-Here's a full-featured example with testing:
+Here's a full-featured example with testing and automatic cleanup:
 
 ```yaml
 name: PR Preview & Tests
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
 permissions:
   contents: read
@@ -196,6 +214,7 @@ permissions:
 
 jobs:
   deploy-and-test:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -218,16 +237,34 @@ jobs:
         with:
           urls: ${{ steps.preview.outputs.preview-url }}
           uploadArtifacts: true
+
+  cleanup:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mertselimb/cloudflare-workers-pr-preview@v1
+        with:
+          cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
+          mode: cleanup
 ```
 
 ## How It Works
 
+### Deploy Mode (default)
 1. **Checkout**: Gets your code
 2. **Setup Node.js**: Installs specified Node version
 3. **Install Dependencies**: Runs your install command
 4. **Build**: Runs your build command
 5. **Deploy**: Deploys to Cloudflare Workers with name `{repo}-pr-{number}`
 6. **Comment**: Posts preview URL to your PR
+
+### Cleanup Mode
+1. **Checkout**: Gets your code
+2. **Delete Worker**: Removes the worker deployment from Cloudflare
+3. **Comment**: Updates PR comment with cleanup notification
 
 ## Preview URL Format
 
