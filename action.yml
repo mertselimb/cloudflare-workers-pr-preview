@@ -121,7 +121,7 @@ runs:
           ✨ **Preview URL:** ${previewUrl}
 
           ---
-          <sub>Deployed with [Cloudflare Workers PR Preview](https://github.com/${{ github.repository }})</sub>`;
+          <sub>Deployed with [Cloudflare Workers PR Preview](https://github.com/mertselimb/cloudflare-workers-pr-preview)</sub>`;
 
           // Check if we already commented
           const { data: comments } = await github.rest.issues.listComments({
