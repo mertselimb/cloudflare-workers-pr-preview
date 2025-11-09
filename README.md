@@ -72,7 +72,7 @@ jobs:
       # Deploy preview on PR open/update
       - name: Deploy Preview
         if: github.event.action != 'closed'
-        uses: mertselimb/cloudflare-workers-pr-preview@v1
+        uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
         with:
           cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -80,7 +80,7 @@ jobs:
       # Cleanup preview on PR close/merge
       - name: Cleanup Preview
         if: github.event.action == 'closed'
-        uses: mertselimb/cloudflare-workers-pr-preview@v1
+        uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
         with:
           cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -100,7 +100,7 @@ That's it! 🎉
 ### Basic Example
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -109,7 +109,7 @@ That's it! 🎉
 ### Custom Build Command
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -120,7 +120,7 @@ That's it! 🎉
 ### Using pnpm
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -131,7 +131,7 @@ That's it! 🎉
 ### Monorepo Setup
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -142,7 +142,7 @@ That's it! 🎉
 ### Custom Subdomain
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -153,7 +153,7 @@ That's it! 🎉
 ### Without PR Comments
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -186,7 +186,7 @@ That's it! 🎉
 ### Using Outputs
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   id: preview
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
@@ -221,7 +221,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: mertselimb/cloudflare-workers-pr-preview@v1
+      - uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
         id: preview
         with:
           cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
@@ -235,7 +235,7 @@ jobs:
           BASE_URL: ${{ steps.preview.outputs.preview-url }}
 
       - name: Run Lighthouse
-        uses: treosh/lighthouse-ci-action@v10
+        uses: treosh/lighthouse-ci-action@v1.0.1
         with:
           urls: ${{ steps.preview.outputs.preview-url }}
           uploadArtifacts: true
@@ -246,7 +246,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: mertselimb/cloudflare-workers-pr-preview@v1
+      - uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
         with:
           cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
           cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -285,7 +285,7 @@ For example:
 ### Astro
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -295,7 +295,7 @@ For example:
 ### Remix
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
@@ -305,7 +305,7 @@ For example:
 ### Hono
 
 ```yaml
-- uses: mertselimb/cloudflare-workers-pr-preview@v1
+- uses: mertselimb/cloudflare-workers-pr-preview@v1.0.1
   with:
     cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
     cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
