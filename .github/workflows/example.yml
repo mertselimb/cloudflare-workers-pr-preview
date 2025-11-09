@@ -1,0 +1,31 @@
+name: Deploy PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    name: Deploy Preview
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Cloudflare Workers
+        uses: mertselimb/cloudflare-workers-pr-preview@v1
+        with:
+          cloudflare-api-token: ${{ secrets.CF_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CF_ACCOUNT_ID }}
+          # Customize these as needed:
+          # build-command: npm run build
+          # install-command: npm ci
+          # package-manager: npm
+          # node-version: 18
+          # working-directory: .
+          # subdomain: my-custom-name
