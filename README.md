@@ -93,6 +93,8 @@ That's it! 🎉
 - When a PR is opened or updated → Deploys preview to Cloudflare Workers
 - When a PR is closed or merged → Automatically deletes the worker deployment
 
+> **Example workflow:** See [`workflow-example.yml`](workflow-example.yml) for a complete working example.
+
 ## Usage
 
 ### Basic Example
